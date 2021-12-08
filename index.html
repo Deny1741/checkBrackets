@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Тестовое задание</title>
+</head>
+
+<style>
+    .container {
+        width: 600px;
+        margin: auto auto 20px auto;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .button-group {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    button {
+        margin-top: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .result {
+        min-height: 1.25em;
+        line-height: 1.25;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wrap {
+        width: 600px;
+        margin: 0 auto;
+    }
+
+</style>
+<body>
+
+    <div class="container">
+        <h2 class="result"></h2>
+    </div>
+
+    <div class="container">
+        <input type="text" class="form-control" id="brackets" placeholder="Введите выражение">
+        <div class="button-group">
+            <button id="btn" class="btn btn-primary">Отправить</button>
+        </div>
+    </div>
+
+    <div class="wrap"></div>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        function add(result, input) {
+            let params = new URLSearchParams();
+            params.set('name', input);
+            params.set('result', result ? 1 : 0);
+
+            fetch('/include/addBrackets.php', {
+                method: 'POST',
+                body: params
+            })
+        }
+
+        document.getElementById('btn').addEventListener('click', event => {
+            let input = document.getElementsByTagName('input')[0].value;
+
+            fetch('/include/brackets.php?func=brackets&value=' + input)
+                .then(response => response.json())
+                .then(data => {
+
+                    document.getElementsByClassName('result')[0].innerText = data.success;
+
+                    add(data.success, input);
+
+                    document.getElementsByTagName('tbody')[0].innerHTML += '<tr>'
+                        +
+                        '<td>' + input + '</td>' +
+                        '<td>' + data.success + '</td>' +
+                        '</tr>';
+                });
+
+        })
+
+        function getTable() {
+            fetch('/templates/table.php')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementsByClassName('wrap')[0].innerHTML = data;
+                });
+       }
+
+       getTable();
+    });
+</script>
+</html>
