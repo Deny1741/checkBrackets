@@ -86,11 +86,12 @@
 
                     add(data.success, input);
 
-                    document.getElementsByTagName('tbody')[0].innerHTML += '<tr>'
+                    document.getElementsByTagName('tbody')[0].innerHTML = '<tr>'
                         +
                         '<td>' + input + '</td>' +
                         '<td>' + data.success + '</td>' +
-                        '</tr>';
+                        '</tr>' + document.getElementsByTagName('tbody')[0].innerHTML;
+
                 });
 
         })
