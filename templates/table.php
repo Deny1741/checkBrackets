@@ -16,7 +16,7 @@ $table = getTable($pdo);
     <tbody>
         <?php foreach ($table as $row) {?>
             <tr>
-                <td><?=$row['name']?></td>
+                <td><?=htmlspecialchars($row['name'], ENT_QUOTES);?></td>
                 <td><?=$row['result'] ? 'true' : 'false'?></td>
             </tr>
         <?php }?>
